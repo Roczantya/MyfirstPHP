@@ -1,52 +1,44 @@
 <?php
-// Include the necessary classes
-require_once 'EBook.php';
-require_once 'PrintedBook.php';
+// Sertakan kelas yang diperlukan
+require_once 'Ebook.php';
+require_once 'Printedbook.php';
 
-$bookDetails = "";
-$books = []; // Array untuk menyimpan buku
+session_start(); // Mulai sesi
 
-// Check if the form has been submitted
+// Inisialisasi array untuk menyimpan detail buku jika belum ada
+if (!isset($_SESSION['books'])) {
+    $_SESSION['books'] = [];
+}
+
+// Cek apakah form telah disubmit
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $title = $_POST['title'];
-    $author = $_POST['author'];
-    $publicationYear = $_POST['publicationYear'];
+    $Title = $_POST['title'];
+    $Author = $_POST['author'];
+    $Publication_Year = $_POST['publicationYear'];
     $bookType = $_POST['bookType'];
 
     if ($bookType == 'ebook') {
         $fileSize = $_POST['fileSize'];
-        $ebook = new EBook($title, $author, $publicationYear, $fileSize);
-        $bookDetails = $ebook->getDetails();
+        $ebook = new Ebook($Title, $Author, $Publication_Year, $bookType, $fileSize); // Membuat objek EBook
+        $bookDetails = $ebook->getDetails(); // Mengambil detail dari objek EBook
     } else {
-        $numberOfPages = $_POST['numberOfPages'];
-        $printedBook = new PrintedBook($title, $author, $publicationYear, $numberOfPages);
-        $bookDetails = $printedBook->getDetails();
+        $numberOfPages = $_POST['numberofpages'];
+        $printedBook = new Printedbook($Title, $Author, $Publication_Year, $bookType, $numberOfPages);
+        $bookDetails = $printedBook->getDetails(); // Mengambil detail dari objek PrintedBook
     }
 
-    // Simpan detail buku ke file JSON
-    $jsonFile = 'books.json';
-
-    if (file_exists($jsonFile)) {
-        $existingBooks = json_decode(file_get_contents($jsonFile), true);
-    } else {
-        $existingBooks = [];
-    }
-
-    $bookData = [
-        'title' => $title,
-        'author' => $author,
-        'publicationYear' => $publicationYear,
+    // Simpan detail buku ke dalam array sesi
+    $_SESSION['books'][] = [
+        'title' => $Title,
+        'author' => $Author,
+        'publicationYear' => $Publication_Year,
         'bookType' => $bookType,
+        'details' => $bookDetails
     ];
 
-    if ($bookType == 'ebook') {
-        $bookData['fileSize'] = $fileSize;
-    } else {
-        $bookData['numberOfPages'] = $numberOfPages;
-    }
-
-    $existingBooks[] = $bookData;
-    file_put_contents($jsonFile, json_encode($existingBooks, JSON_PRETTY_PRINT));
+    echo "<pre>";
+        print_r($_SESSION['books']);
+    echo "</pre>";
 }
 ?>
 
@@ -55,83 +47,89 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Input Book</title>
+    <title>Input Informasi Buku</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             margin: 20px;
             padding: 20px;
             border: 1px solid #ccc;
+            background-color: #f9f9f9;
         }
         h1 {
             color: #333;
         }
+        .form-group {
+            margin-bottom: 10px;
+        }
+        button {
+            display: inline-block;
+            margin-top: 20px;
+            text-decoration: none;
+            padding: 10px 15px;
+            background-color: #007bff;
+            color: white;
+            border-radius: 5px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
         .book {
             margin-top: 20px;
             padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-        }
-        .form-group {
-            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            background-color: #fff;
         }
     </style>
 </head>
 <body>
 
-    <h1>Input Book Information</h1>
-    <form method="post" action="">
-        <div class="form-group">
-            <label for="title">Title:</label>
-            <input type="text" id="title" name="title" required>
-        </div>
-        <div class="form-group">
-            <label for="author">Author:</label>
-            <input type="text" id="author" name="author" required>
-        </div>
-        <div class="form-group">
-            <label for="publicationYear">Publication Year:</label>
-            <input type="number" id="publicationYear" name="publicationYear" min="2000" max="2100" required>
-        </div>
-        <div class="form-group">
-            <label for="bookType">Select Book Type:</label>
-            <select id="bookType" name="bookType" required>
-                <option value="ebook">EBook</option>
-                <option value="printed">Printed Book</option>
-            </select>
-        </div>
-        <div class="form-group" id="ebookFields">
-            <label for="fileSize">File Size (MB):</label>
-            <input type="number" id="fileSize" name="fileSize" step="0.1" required>
-        </div>
-        <div class="form-group" id="printedFields" style="display: none;">
-            <label for="numberOfPages">Number of Pages:</label>
-            <input type="number" id="numberOfPages" name="numberOfPages" required>
-        </div>
-        <button type="submit">Submit</button>
-    </form>
+<h1>Input Informasi Buku</h1>
+<form method="post" action="">
+    <div class="form-group">
+        <label for="title">Judul:</label>
+        <input type="text" id="title" name="title" required>
+    </div>
+    <div class="form-group">
+        <label for="author">Pengarang:</label>
+        <input type="text" id="author" name="author" required>
+    </div>
+    <div class="form-group">
+        <label for="publicationYear">Tahun Publikasi:</label>
+        <input type="number" id="publicationYear" name="publicationYear" min="1500" max="2024" required>
+    </div>
+    <div class="form-group">
+        <label for="bookType">Pilih Tipe Buku:</label>
+        <select id="bookType" name="bookType" required>
+            <option value="ebook">EBook</option>
+            <option value="printed">Buku Cetak</option>
+        </select>
+    </div>
+    <div class="form-group" id="ebookFields">
+        <label for="fileSize">Ukuran File (MB):</label>
+        <input type="number" id="fileSize" name="fileSize" step="0.1" required>
+    </div>
+    <div class="form-group" id="printedFields" style="display: none;">
+        <label for="numberofpages">Jumlah Halaman:</label>
+        <input type="number" id="numberofpages" name="numberofpages" required>
+    </div>
+    <button type="submit">Kirim</button>
+</form>
 
-    <?php if ($bookDetails): ?>
+<!-- Tampilkan detail buku yang disubmit -->
+<?php if (!empty($_SESSION['books'])): ?>
+    <h2>Detail Buku yang Disubmit:</h2>
+    <?php foreach ($_SESSION['books'] as $book): ?>
         <div class="book">
-            <h2>Book Details</h2>
-            <p><?php echo $bookDetails; ?></p>
+            <h3><?php echo htmlspecialchars($book['title']); ?></h3>
+            <p><strong>Pengarang:</strong> <?php echo htmlspecialchars($book['author']); ?></p>
+            <p><strong>Tahun Publikasi:</strong> <?php echo htmlspecialchars($book['publicationYear']); ?></p>
+            <p><strong>Tipe:</strong> <?php echo htmlspecialchars($book['bookType']); ?></p>
+            <p><strong>Detail:</strong> <?php echo nl2br(htmlspecialchars($book['details'])); ?></p>
         </div>
-    <?php endif; ?>
+    <?php endforeach; ?>
+<?php endif; ?>
 
-    <a href="books.php">View All Books</a>
-
-    <script>
-        // Show/hide fields based on book type selection
-        document.getElementById('bookType').addEventListener('change', function () {
-            if (this.value == 'ebook') {
-                document.getElementById('ebookFields').style.display = 'block';
-                document.getElementById('printedFields').style.display = 'none';
-            } else {
-                document.getElementById('ebookFields').style.display = 'none';
-                document.getElementById('printedFields').style.display = 'block';
-            }
-        });
-    </script>
 
 </body>
 </html>

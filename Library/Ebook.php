@@ -1,21 +1,21 @@
 <?php
-// Include the base class
+// Sertakan kelas dasar
 require_once 'Book.php';
 
-// Derived Class: EBook
-class EBook extends Book {
-    private $fileSize; // Size of the eBook in MB
+// Kelas Turunan: EBook
+class Ebook extends Book {
+    private $fileSize; // Ukuran eBook dalam MB
 
-    // Constructor
-    public function __construct($Title, $Author, $Publication_Year, $fileSize) {
-        // Call the parent constructor
-        parent::__construct($Title, $Author, $Publication_Year);
+    // Konstruktor
+    public function __construct($Title, $Author, $Publication_Year, $BookType, $fileSize) {
+        // Panggil konstruktor induk
+        parent::__construct($Title, $Author, $Publication_Year, $BookType);
         $this->fileSize = $fileSize;
     }
 
-    // Override the getDetails method to include file size
+    // Override metode getDetails untuk menyertakan ukuran file
     public function getDetails() {
-        return parent::getDetails() . ", File Size: {$this->fileSize} MB";
+        return "EBook - Ukuran: " . $this->fileSize . " MB, Judul: " . $this->getTitle() . ", Pengarang: " . $this->getAuthor() . ", Tahun: " . $this->getPublication_Year() . ", Tipe Buku: " . $this->getBookType();
     }
 }
 ?>
