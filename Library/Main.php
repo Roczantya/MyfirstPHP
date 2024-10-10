@@ -16,35 +16,48 @@ if (!isset($_SESSION['books'])) {
 // Cek apakah form telah disubmit
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($_POST['title'], $_POST['author'], $_POST['publicationYear'], $_POST['bookType'])) {
-        $Title = $_POST['title'];
-        $Author = $_POST['author'];
-        $Publication_Year = $_POST['publicationYear'];
+        $title = $_POST['title'];
+        $author = $_POST['author'];
+        $publicationYear = $_POST['publicationYear'];
         $bookType = $_POST['bookType'];
-        
-        // Check book type and create objects accordingly
+
+        // Inisialisasi pesan kesalahan
+        $errorMessage = '';
+
+        // Cek tipe buku dan buat objek sesuai
         if ($bookType == 'EBook' && isset($_POST['fileSize'])) {
             $fileSize = $_POST['fileSize'];
-            $EBook = new Ebook($Title, $Author, $Publication_Year, $fileSize);
-            $bookDetails = "<strong>Judul: </strong> $Title\n<strong>Pengarang: </strong> $Author\n<strong>Tahun Publikasi: </strong> $Publication_Year\n<strong>Tipe: </strong> E-Book\n<strong>Ukuran File: </strong> $fileSize MB";
+            $ebook = new Ebook($title, $author, $publicationYear, $fileSize);
+            $errorMessage = ob_get_clean(); // Ambil output buffer untuk pesan kesalahan
+
+            // Tambahkan detail buku jika tidak ada kesalahan
+            if (empty($errorMessage)) {
+                $bookDetails = "<strong>Judul: </strong> $title\n<strong>Pengarang: </strong> $author\n<strong>Tahun Publikasi: </strong> $publicationYear\n<strong>Tipe: </strong> E-Book\n<strong>Ukuran File: </strong> $fileSize MB";
+                $_SESSION['books'][] = ['Details' => nl2br($bookDetails)];
+            }
         } elseif ($bookType == 'Printed Book' && isset($_POST['numberofpages'])) {
             $numberOfPages = $_POST['numberofpages'];
-            $printedBook = new Printedbook($Title, $Author, $Publication_Year, $numberOfPages);
-            $bookDetails = "<strong>Judul: </strong> $Title\n<strong>Pengarang: </strong> $Author\n<strong>Tahun Publikasi: </strong> $Publication_Year\n<strong>Tipe: </strong> Buku Cetak\n<strong>Jumlah Halaman: </strong> $numberOfPages";
+            $printedBook = new Printedbook($title, $author, $publicationYear, $numberOfPages);
+            $errorMessage = ob_get_clean(); // Ambil output buffer untuk pesan kesalahan
+
+            // Tambahkan detail buku jika tidak ada kesalahan
+            if (empty($errorMessage)) {
+                $bookDetails = "<strong>Judul: </strong> $title\n<strong>Pengarang: </strong> $author\n<strong>Tahun Publikasi: </strong> $publicationYear\n<strong>Tipe: </strong> Buku Cetak\n<strong>Jumlah Halaman: </strong> $numberOfPages";
+                $_SESSION['books'][] = ['Details' => nl2br($bookDetails)];
+            }
         } else {
-            $bookDetails = "Details are missing.";
+            $errorMessage = "Details are missing.";
         }
-        
 
-        // Store book details in session
-       // Store book details in session with appropriate escaping for HTML output
-        $_SESSION['books'][] = [
-            'Details' => nl2br($bookDetails) // Only apply nl2br without htmlspecialchars to avoid literal <br>
-        ];
-
+        // Jika ada pesan kesalahan, tampilkan
+        if (!empty($errorMessage)) {
+            echo $errorMessage; // Tampilkan pesan kesalahan
+        }
     } else {
-        $error = "Please fill all required fields.";
+        echo "Please fill all required fields.";
     }
 }
+
 ?>
 
 <!DOCTYPE html>
@@ -97,7 +110,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </div>
     <div class="form-group">
         <label for="author">Pengarang:</label>
-        <input type="text" id="author" name="author" required>
+        <input type="text" id="author" name="author" >
     </div>
     <div class="form-group">
         <label for="publicationYear">Tahun Publikasi:</label>

@@ -1,76 +1,72 @@
-<?php
-// Kelas Dasar: Book
-    class Book {
-        protected $title;
-        protected $author;
-        protected $publicationYear;
-        protected $bookType;
-    
-        public function __construct($title, $author, $publicationYear, $bookType) {
-            $this->title = $title;
-            $this->author = $author;
-            $this->publicationYear = $publicationYear;
-            $this->bookType = $bookType;
-        }
-    
-        
-    public function getTitle() {
-        return $this->Title;
+<?php 
+class Book {
+    protected $title;
+    protected $author;
+    protected $publicationYear;
+    protected $bookType;
+
+    public function __construct($title, $author, $publicationYear, $bookType) {
+        $this->setTitle($title);
+        $this->setAuthor($author);
+        $this->setPublication_Year($publicationYear);
+        $this->setBookType($bookType);
     }
 
-    public function setTitle($Title) {
-        if (is_string($Title) && !empty($Title)) {
-            if (strlen($Title) <= $this->maxtitleLength) {
-                $this->Title = $Title;
-            } else {
-                echo ("Error: Judul tidak boleh lebih dari " . $this->maxtitleLength . " karakter.");
-            }
+    public function getTitle() {
+        return $this->title; // Ubah dari $this->Title ke $this->title
+    }
+
+    public function setTitle($title) {
+        if (empty($title)) {
+            print("Error: Judul tidak boleh kosong."); // Lempar pengecualian jika kosong
+        }
+        if (is_string($title) && strlen($title) <= 100) {
+            $this->title = $title;
         } else {
-            echo ("Error: Judul tidak valid.");
+            print("Error: Judul tidak valid atau lebih dari 100 karakter.");
         }
     }
 
     public function getAuthor() {
-        return $this->Author;
+        return $this->author; // Ubah dari $this->Author ke $this->author
     }
 
-    public function setAuthor($Author) {
-        if (is_string($Author) && !empty($Author)) {
-            if (strlen($Author) <= $this->maxAuthorLength) {
-                $this->Author = $Author;
-            } else {
-                echo ("Error: Nama pengarang tidak boleh lebih dari " . $this->maxAuthorLength . " karakter.");
-            }
+    public function setAuthor($author) {
+        if (empty($author)) {
+            print("Error: Nama pengarang tidak boleh kosong."); // Lempar pengecualian jika kosong
+        }
+        if (is_string($author) && strlen($author) <= 100) {
+            $this->author = $author;
         } else {
-            echo ("Error: Nama pengarang tidak valid.");
+            print("Error: Nama pengarang tidak valid atau lebih dari 100 karakter.");
         }
     }
 
     public function getPublication_Year() {
-        return $this->Publication_Year;
+        return $this->publicationYear; // Ubah dari $this->Publication_Year ke $this->publicationYear
     }
 
-    public function setPublication_Year($Publication_Year) {
-        if (is_numeric($Publication_Year) && $Publication_Year > 0) {
-            $this->Publication_Year = $Publication_Year;
+    public function setPublication_Year($publicationYear) {
+        if (is_numeric($publicationYear) && $publicationYear >= 1500 && $publicationYear <= date("Y")) {
+            $this->publicationYear = $publicationYear; // Ubah dari $this->Publication_Year ke $this->publicationYear
         } else {
-            echo ("Error: Tahun publikasi tidak valid.");
+            echo ("Error: Tahun publikasi harus antara 1500 dan " . date("Y") . ".<br>");
         }
     }
 
     public function getBookType() {
-        return $this->BookType;
+        return $this->bookType; // Ubah dari $this->BookType ke $this->bookType
     }
 
-    public function setBookType($BookType) {
-        $this->BookType = $BookType;
+    public function setBookType($bookType) {
+        $this->bookType = $bookType;
     }
 
     public function getDetails() {
-            return "Judul: " . $this->title . "\n" .
-                   "Pengarang: " . $this->author . "\n" .
-                   "Tahun Publikasi: " . $this->publicationYear . "\n" .
-                   "Tipe: " . $this->bookType;
-        }
-    } 
+        return "Judul: " . $this->title . "\n" .
+               "Pengarang: " . $this->author . "\n" .
+               "Tahun Publikasi: " . $this->publicationYear . "\n" .
+               "Tipe: " . $this->bookType;
+    }
+}
 ?>
