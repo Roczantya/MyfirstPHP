@@ -5,6 +5,7 @@
         protected $author;
         protected $publicationYear;
         protected $bookType;
+
     
         public function __construct($title, $author, $publicationYear, $bookType) {
             $this->title = $title;
@@ -20,10 +21,10 @@
 
     public function setTitle($Title) {
         if (is_string($Title) && !empty($Title)) {
-            if (strlen($Title) <= $this->maxtitleLength) {
+            if (strlen($Title) <= 100) {
                 $this->Title = $Title;
             } else {
-                echo ("Error: Judul tidak boleh lebih dari " . $this->maxtitleLength . " karakter.");
+                echo ("Error: Judul tidak boleh lebih dari  karakter.");
             }
         } else {
             echo ("Error: Judul tidak valid.");
@@ -36,10 +37,10 @@
 
     public function setAuthor($Author) {
         if (is_string($Author) && !empty($Author)) {
-            if (strlen($Author) <= $this->maxAuthorLength) {
+            if (strlen($Author) <= 100) {
                 $this->Author = $Author;
             } else {
-                echo ("Error: Nama pengarang tidak boleh lebih dari " . $this->maxAuthorLength . " karakter.");
+                echo ("Error: Nama pengarang tidak boleh lebih dari 100 karakter.");
             }
         } else {
             echo ("Error: Nama pengarang tidak valid.");
@@ -51,10 +52,10 @@
     }
 
     public function setPublication_Year($Publication_Year) {
-        if (is_numeric($Publication_Year) && $Publication_Year > 0) {
+        if (is_numeric($Publication_Year) && $Publication_Year >= 1500 && $Publication_Year <= 2024) {
             $this->Publication_Year = $Publication_Year;
         } else {
-            echo ("Error: Tahun publikasi tidak valid.");
+            echo ("Error: Tahun publikasi harus antara 1500 dan $currentYear.");
         }
     }
 
