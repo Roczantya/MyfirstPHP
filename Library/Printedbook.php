@@ -4,17 +4,15 @@ require_once 'Book.php';
 
 // Kelas Turunan: PrintedBook
 class Printedbook extends Book {
-    private $numberOfPages; // Jumlah halaman buku cetak
+    private $numberOfPages;
 
-    public function __construct($Title, $Author, $Publication_Year, $BookType, $numberOfPages) {
-        // Panggil konstruktor induk
-        parent::__construct($Title, $Author, $Publication_Year, $BookType);
+    public function __construct($title, $author, $publicationYear, $numberOfPages) {
+        parent::__construct($title, $author, $publicationYear, 'Printed Book'); // Memanggil konstruktor kelas induk
         $this->numberOfPages = $numberOfPages;
     }
 
-    // Override metode getDetails untuk menyertakan jumlah halaman
     public function getDetails() {
-        return "Buku Cetak - Halaman: " . $this->numberOfPages . ", Judul: " . $this->getTitle() . ", Pengarang: " . $this->getAuthor() . ", Tahun: " . $this->getPublication_Year() . ", Tipe Buku: " . $this->getBookType();
+        return parent::getDetails() . "\n" . "Jumlah Halaman: " . $this->numberOfPages;
     }
 }
 ?>

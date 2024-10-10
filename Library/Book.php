@@ -1,20 +1,19 @@
 <?php
 // Kelas Dasar: Book
-class Book {
-    private $Title; // Judul buku
-    private $Author; // Pengarang
-    private $Publication_Year; // Tahun publikasi
-    private $BookType; // Tipe buku
-    private $maxtitleLength = 100; // Panjang maksimal judul
-    private $maxAuthorLength = 100; // Panjang maksimal nama pengarang
-
-    public function __construct($Title, $Author, $Publication_Year, $BookType) {
-        $this->setTitle($Title);
-        $this->setAuthor($Author);
-        $this->setPublication_Year($Publication_Year);
-        $this->setBookType($BookType); // Set tipe buku saat konstruksi
-    }
-
+    class Book {
+        protected $title;
+        protected $author;
+        protected $publicationYear;
+        protected $bookType;
+    
+        public function __construct($title, $author, $publicationYear, $bookType) {
+            $this->title = $title;
+            $this->author = $author;
+            $this->publicationYear = $publicationYear;
+            $this->bookType = $bookType;
+        }
+    
+        
     public function getTitle() {
         return $this->Title;
     }
@@ -66,5 +65,12 @@ class Book {
     public function setBookType($BookType) {
         $this->BookType = $BookType;
     }
-}
+
+    public function getDetails() {
+            return "Judul: " . $this->title . "\n" .
+                   "Pengarang: " . $this->author . "\n" .
+                   "Tahun Publikasi: " . $this->publicationYear . "\n" .
+                   "Tipe: " . $this->bookType;
+        }
+    } 
 ?>

@@ -4,18 +4,15 @@ require_once 'Book.php';
 
 // Kelas Turunan: EBook
 class Ebook extends Book {
-    private $fileSize; // Ukuran eBook dalam MB
+    private $fileSize;
 
-    // Konstruktor
-    public function __construct($Title, $Author, $Publication_Year, $BookType, $fileSize) {
-        // Panggil konstruktor induk
-        parent::__construct($Title, $Author, $Publication_Year, $BookType);
+    public function __construct($title, $author, $publicationYear, $fileSize) {
+        parent::__construct($title, $author, $publicationYear, 'E-Book'); // Memanggil konstruktor kelas induk
         $this->fileSize = $fileSize;
     }
 
-    // Override metode getDetails untuk menyertakan ukuran file
     public function getDetails() {
-        return "EBook - Ukuran: " . $this->fileSize . " MB, Judul: " . $this->getTitle() . ", Pengarang: " . $this->getAuthor() . ", Tahun: " . $this->getPublication_Year() . ", Tipe Buku: " . $this->getBookType();
+        return parent::getDetails() . "\n" . "Ukuran File: " . $this->fileSize . " MB";
     }
 }
 ?>
