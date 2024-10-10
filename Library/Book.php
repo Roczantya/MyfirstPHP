@@ -18,12 +18,12 @@ class Book {
 
     public function setTitle($title) {
         if (empty($title)) {
-            throw new Exception("Error: Judul tidak boleh kosong."); // Lempar pengecualian jika kosong
+            print("Error: Judul tidak boleh kosong."); // Lempar pengecualian jika kosong
         }
         if (is_string($title) && strlen($title) <= 100) {
-            $this->title = $title;
+            $this->author = $author;
         } else {
-            throw new Exception("Error: Nama pengarang tidak valid atau lebih dari 100 karakter.");
+            print("Error: Nama pengarang tidak valid atau lebih dari 100 karakter.");
         }
     }
 
@@ -33,12 +33,12 @@ class Book {
 
     public function setAuthor($author) {
         if (empty($author)) {
-            throw new Exception("Error: Nama pengarang tidak boleh kosong."); // Lempar pengecualian jika kosong
+            print("Error: Nama pengarang tidak boleh kosong."); // Lempar pengecualian jika kosong
         }
         if (is_string($author) && strlen($author) <= 100) {
             $this->author = $author;
         } else {
-            throw new Exception("Error: Nama pengarang tidak valid atau lebih dari 100 karakter.");
+            print("Error: Nama pengarang tidak valid atau lebih dari 100 karakter.");
         }
     }
 

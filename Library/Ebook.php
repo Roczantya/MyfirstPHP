@@ -11,7 +11,7 @@ class Ebook extends Book {
         if ($fileSize <= 100){ // Memanggil konstruktor kelas induk
         $this->fileSize = $fileSize;
         } else {
-            throw new Exception("Error: Ukuran file lebih dari 100 MB"); // Melempar pengecualian jika tidak valid
+            print("Error: Ukuran file lebih dari 100 MB"); // Melempar pengecualian jika tidak valid
         }
     }
 
