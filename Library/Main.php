@@ -110,7 +110,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </div>
     <div class="form-group">
         <label for="author">Pengarang:</label>
-        <input type="text" id="author" name="author" required>
+        <input type="text" id="author" name="author" >
     </div>
     <div class="form-group">
         <label for="publicationYear">Tahun Publikasi:</label>
