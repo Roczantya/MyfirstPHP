@@ -21,7 +21,7 @@ class Book {
             print("Error: Judul tidak boleh kosong."); // Lempar pengecualian jika kosong
         }
         if (is_string($title) && strlen($title) <= 100) {
-            $this->title = $title
+            $this->title = $title;
         } else {
             print("Error: Judul tidak valid atau lebih dari 100 karakter.");
         }
